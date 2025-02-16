@@ -61,6 +61,14 @@ install:
 client: $(BUILD_DIR)
 	@ $(MAKE) -C $(CLIENT_DIR) packet listener client
 
+github-action:
+	@ $(MAKE) -C $(PWD) config
+	@ $(MAKE) -C $(PWD) all
+
+github-action-install:
+	@ sudo apt-get update
+	@ sudo apt-get install -y build-essential libncurses-dev linux-headers-$(uname -r)
+
 .PHONY : clean module config
 
 clean:
