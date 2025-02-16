@@ -8,15 +8,48 @@ on:
 
 jobs:
   build:
-
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os:  [ubuntu-latest, rocky-linux-9]
+    runs-on: ${{ matrix.os }}
 
     steps:
-    - uses: actions/checkout@v4
-    - name: make config
-      run: make config
-    - name: make
-      run: make
-    - name: make install
-      run: make install
+      - uses: actions/checkout@v4
+      - name: Install Dependencies (${{ matrix.os }}) # OS-specific dependencies
+        run: |
+          if [[ "${{ matrix.os }}" == "ubuntu-latest" ]]; then
+            sudo apt-get update
+            sudo apt-get install -y linux-headers-generic
+          elif [[ "${{ matrix.os }}" == "ubuntu-20.04" ]]; then
+            sudo apt-get update
+            sudo apt-get install -y linux-headers-$(uname -r)
+          elif [[ "${{ matrix.os }}" == "ubuntu-18.04" ]]; then
+            sudo apt-get update
+            sudo apt-get install -y linux-headers-$(uname -r)
+          elif [[ "${{ matrix.os }}" == "debian-11" ]]; then
+            sudo apt-get update
+            sudo apt-get install -y linux-headers-$(uname -r)
+          elif [[ "${{ matrix.os }}" == "debian-10" ]]; then
+            sudo apt-get update
+            sudo apt-get install -y linux-headers-$(uname -r)
+          elif [[ "${{ matrix.os }}" == "debian-9" ]]; then
+            sudo apt-get update
+            sudo apt-get install -y linux-headers-$(uname -r)
+          elif [[ "${{ matrix.os }}" == "debian-8" ]]; then
+            sudo apt-get update
+            sudo apt-get install -y linux-headers-$(uname -r)
+          elif [[ "${{ matrix.os }}" == "fedora-39" || "${{ matrix.os }}" == "fedora-38" || "${{ matrix.os }}" == "fedora-37" || "${{ matrix.os }}" == "fedora-36" ]]; then  # Fedora
+            sudo dnf -y install kernel-headers
+            # Fedora often needs development tools
+            sudo dnf -y groupinstall "Development Tools"
+          elif [[ "${{ matrix.os }}" == "centos-stream-9" || "${{ matrix.os }}" == "centos-stream-8" || "${{ matrix.os }}" == "rocky-linux-9" || "${{ matrix.os }}" == "rocky-linux-8" ]]; then  # RHEL-likes
+            sudo dnf -y install kernel-devel # Use kernel-devel on RHEL-based
+            sudo dnf -y groupinstall "Development Tools" # Often needed
+          fi
+      - name: make config
+        run: make config
+      - name: make
+        run: make
+      - name: make install
+        run: make install
 
