@@ -13,8 +13,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: make menuconfig
-      run: make menuconfig
+    - name: make config
+      run: make config
     - name: make
       run: make
     - name: make install
