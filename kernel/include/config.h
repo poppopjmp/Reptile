@@ -28,34 +28,6 @@
 // Dynamically generated configurations
 #include <linux/random.h>
 
-static inline unsigned int generate_random_key(void)
-{
-    unsigned int key;
-    get_random_bytes(&key, sizeof(key));
-    return key;
-}
-
-static inline unsigned short generate_random_ipid(void)
-{
-    unsigned short ipid;
-    get_random_bytes(&ipid, sizeof(ipid));
-    return ipid;
-}
-
-static inline unsigned int generate_random_seq(void)
-{
-    unsigned int seq;
-    get_random_bytes(&seq, sizeof(seq));
-    return seq;
-}
-
-static inline unsigned short generate_random_win(void)
-{
-    unsigned short win;
-    get_random_bytes(&win, sizeof(win));
-    return win;
-}
-
 #define DYNAMIC_KEY generate_random_key()
 #define DYNAMIC_IPID generate_random_ipid()
 #define DYNAMIC_SEQ generate_random_seq()
