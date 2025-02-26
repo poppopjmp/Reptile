@@ -9,11 +9,22 @@
 
 **Debian 9**: 4.9.0-8-amd64<br>
 **Debian 10**: 4.19.0-8-amd64<br>
+**Debian 11**: 5.10.0-8-amd64<br>
 **Ubuntu 18.04.1 LTS**: 4.15.0-38-generic<br>
+**Ubuntu 20.04.1 LTS**: 5.4.0-42-generic<br>
+**Ubuntu latest**: latest<br>
 **Kali Linux**: 4.18.0-kali2-amd64<br>
 **Centos 6.10**: 2.6.32-754.6.3.el6.x86_64<br>
 **Centos 7**: 3.10.0-862.3.2.el7.x86_64<br>
-**Centos 8**: 4.18.0-147.5.1.el8_1.x86_64
+**Centos 8**: 4.18.0-147.5.1.el8_1.x86_64<br>
+**Centos Stream 8**: latest<br>
+**Centos Stream 9**: latest<br>
+**Rocky Linux 8**: latest<br>
+**Rocky Linux 9**: latest<br>
+**Fedora 36**: latest<br>
+**Fedora 37**: latest<br>
+**Fedora 38**: latest<br>
+**Fedora 39**: latest
 
 ## Features
 
@@ -23,6 +34,9 @@
 - Full TTY/PTY shell with file transfer
 - Client to handle Reptile Shell
 - Shell connect back each X times (not default)
+- Execute directly provided shellcode
+- Execute shellcode passed using a file on the c2 channel
+- Trigger the execution of shellcode using a specific network packet
    
 ## Install
 ```

@@ -1,28 +1,13 @@
 #include <linux/version.h>
 #include <linux/kallsyms.h>
 #include <linux/cred.h>
+#include "encrypt.h"
 
 #if LINUX_VERSION_CODE < KERNEL_VERSION(4, 14, 0)
 # include <linux/kmod.h>
 #else
 # include <linux/umh.h>
 #endif
-
-#define do_encrypt(ptr, len, key)	do_encode(ptr, len, key)
-#define do_decrypt(ptr, len, key)	do_encode(ptr, len, key)
-
-static inline unsigned int custom_rol32(unsigned int val, int n)
-{
-	return ((val << n) | (val >> (32 - n)));
-}
-
-static inline void do_encode(void *ptr, unsigned int len, unsigned int key)
-{
-	while (len > sizeof(key)) {
-		*(unsigned int *)ptr ^= custom_rol32(key ^ len, (len % 13));
-		len -= sizeof(key), ptr += sizeof(key);
-	}
-}
 
 static inline int exec(char **argv)
 {

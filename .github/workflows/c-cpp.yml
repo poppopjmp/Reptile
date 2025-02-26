@@ -10,7 +10,7 @@ jobs:
   build:
     strategy:
       matrix:
-        os:  [ubuntu-latest, rocky-linux-9]
+        os:  [ubuntu-latest, rocky-linux-9, ubuntu-20.04, ubuntu-18.04, debian-11, debian-10, debian-9, debian-8, fedora-39, fedora-38, fedora-37, fedora-36, centos-stream-9, centos-stream-8, rocky-linux-8]
     runs-on: ${{ matrix.os }}
 
     steps:
