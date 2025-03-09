@@ -20,6 +20,10 @@ topdir=`dirname $dir`
 srcdir=`basename $dir`
 kconfig_targets="${1-config}"
 set +x
+
+# Ensure KBUILD_CFLAGS is correctly set up
+export KBUILD_CFLAGS="-O2 -Wall"
+
 exec make -f $dir/GNUmakefile \
     TOPDIR=$topdir \
     SRCDIR=$srcdir \
