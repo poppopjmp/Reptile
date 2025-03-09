@@ -73,3 +73,7 @@ github-action-install:
 
 clean:
 	@ $(RM) $(BUILD_DIR) $(CONFIG_FILE)
+
+$(BUILD_DIR)/backdoor.o: $(MODULE_DIR)/backdoor.c
+	@ echo "  CC      $(BUILD_DIR)/backdoor.o"
+	@ $(CC) $(INCLUDE) -c $< -o $@
