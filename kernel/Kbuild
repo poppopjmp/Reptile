@@ -35,5 +35,5 @@ ccflags-$(CONFIG_GIVE_ROOT)         += -DCONFIG_GIVE_ROOT
 ccflags-y                           += -DAUTH=$(AUTH)
 ccflags-y                           += -DHTUA=$(HTUA)
 
-KBUILD_CFLAGS	                    := $(filter-out -pg,$(KBUILD_CFLAGS))
+KBUILD_CFLAGS	                    := $(filter-out -pg,$$(KBUILD_CFLAGS))
 KBUILD_CFLAGS	                    := $(filter-out -mfentry,$(KBUILD_CFLAGS))

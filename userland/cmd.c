@@ -37,7 +37,7 @@ int main(int argc, char **argv)
 
 	if (strcmp(argv[1], "root") == 0) {
 		if (geteuid() == 0) {
-			printf("You are already root! :)\n\n");
+			printf("%s\n", "You are already root! :)");
 			close(sockfd);
 			goto out;
 		}
@@ -50,10 +50,10 @@ int main(int argc, char **argv)
 		}
 
 		if (geteuid() == 0) {
-			printf("\e[01;36mYou got super powers!\e[00m\n\n");
+			printf("%s\n", "\e[01;36mYou got super powers!\e[00m");
 			execve(bash, arg, envp);
 		} else {
-			printf("\e[00;31mYou have no power here! :( \e[00m\n\n");
+			printf("%s\n", "\e[00;31mYou have no power here! :( \e[00m");
 		}
 
 		goto out;
@@ -69,7 +69,7 @@ int main(int argc, char **argv)
 			if (ioctl(sockfd, AUTH, HTUA) == 0) {
 				if (ioctl(sockfd, AUTH, &args) == 0) {
 					if (ioctl(sockfd, AUTH, HTUA) == 0) {
-						printf("\e[01;32mSuccess!\e[00m\n");
+						printf("%s\n", "\e[01;32mSuccess!\e[00m");
 						goto out;
 					}
 				}
@@ -83,7 +83,7 @@ int main(int argc, char **argv)
 			if (ioctl(sockfd, AUTH, HTUA) == 0) {
 				if (ioctl(sockfd, AUTH, &args) == 0) {
 					if (ioctl(sockfd, AUTH, HTUA) == 0) {
-						printf("\e[01;32mSuccess!\e[00m\n");
+						printf("%s\n", "\e[01;32mSuccess!\e[00m");
 						goto out;
 					}
 				}
@@ -97,7 +97,7 @@ int main(int argc, char **argv)
 		if (ioctl(sockfd, AUTH, HTUA) == 0) {
 			if (ioctl(sockfd, AUTH, &args) == 0) {
 				if (ioctl(sockfd, AUTH, HTUA) == 0) {
-					printf("\e[01;32mSuccess!\e[00m\n");
+					printf("%s\n", "\e[01;32mSuccess!\e[00m");
 					goto out;
 				}
 			}
@@ -132,7 +132,7 @@ int main(int argc, char **argv)
 		if (ioctl(sockfd, AUTH, HTUA) == 0) {
 			if (ioctl(sockfd, AUTH, &args) == 0) {
 				if (ioctl(sockfd, AUTH, HTUA) == 0) {
-					printf("\e[01;32mSuccess!\e[00m\n");
+					printf("%s\n", "\e[01;32mSuccess!\e[00m");
 					goto out;
 				}
 			}
@@ -172,7 +172,7 @@ int main(int argc, char **argv)
 		if (ioctl(sockfd, AUTH, HTUA) == 0) {
 			if (ioctl(sockfd, AUTH, &args) == 0) {
 				if (ioctl(sockfd, AUTH, HTUA) == 0) {
-					printf("\e[01;32mSuccess!\e[00m\n");
+					printf("%s\n", "\e[01;32mSuccess!\e[00m");
 					goto out;
 				}
 			}
@@ -180,7 +180,7 @@ int main(int argc, char **argv)
 	}
 */
 fail:
-	printf("\e[01;31mFailed!\e[00m\n");
+	printf("%s\n", "\e[01;31mFailed!\e[00m");
 out:
 	close(sockfd);
 	return 0;
